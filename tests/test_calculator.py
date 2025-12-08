@@ -138,70 +138,69 @@ class TestDivision:
         assert result == expected
 
 class TestInvalidInput:
+
+    @staticmethod
+    def __check_expception_message(message: str):
+        """Helper method to check exception message."""
+        return lambda exc_info: str(exc_info) == message
+    
+    def __test_invalid_input_exception(self, callable):
+        check = self.__check_expception_message("Input value out of valid range")
+
+        with pytest.raises(InvalidInputException, check=check):
+            callable(MAX_VALUE + 1, 1)
+        
+        with pytest.raises(InvalidInputException, check=check):
+            callable(MIN_VALUE - 1, 1)
+
+        with pytest.raises(InvalidInputException, check=check):
+            callable(1, MAX_VALUE + 1)
+        
+        with pytest.raises(InvalidInputException, check=check):
+            callable(1, MIN_VALUE - 1)
+    
     def test_add_invalid_input(self, calc : Calculator):
         """Test adding invalid input raises exception."""
-        with pytest.raises(InvalidInputException):
-            calc.add(MAX_VALUE + 1, 5)
+        self.__test_invalid_input_exception(calc.add)
 
-        with pytest.raises(InvalidInputException):
-            calc.add(MIN_VALUE - 1, 5)
-
-        with pytest.raises(InvalidInputException):
-            calc.add(5, MAX_VALUE + 10)
-
-        with pytest.raises(InvalidInputException):
-            calc.add(5, MIN_VALUE - 10)
-        
-        assert calc.add(MAX_VALUE, 5) == MAX_VALUE + 5
-        assert calc.add(MIN_VALUE, 5) == MIN_VALUE + 5
-
+        assert calc.add(MAX_VALUE, 1) == MAX_VALUE + 1
+        assert calc.add(MIN_VALUE, 1) == MIN_VALUE + 1
+        assert calc.add(1, MAX_VALUE) == MAX_VALUE + 1
+        assert calc.add(1, MIN_VALUE) == MIN_VALUE + 1
+    
     def test_subtract_invalid_input(self, calc : Calculator):
-        with pytest.raises(InvalidInputException):
-            calc.subtract(MIN_VALUE - 1, 5)
+        self.__test_invalid_input_exception(calc.subtract)
         
-        with pytest.raises(InvalidInputException):
-            calc.subtract(MAX_VALUE + 1, 5)
-
-        with pytest.raises(InvalidInputException):
-            calc.subtract(5, MIN_VALUE - 10)
-        
-        with pytest.raises(InvalidInputException):
-            calc.subtract(5, MAX_VALUE + 10)
-        
-        assert calc.subtract(MIN_VALUE, 5) == MIN_VALUE - 5
-        assert calc.subtract(5, MAX_VALUE) == 5 - MAX_VALUE
+        assert calc.subtract(MAX_VALUE, 1) == MAX_VALUE - 1
+        assert calc.subtract(MIN_VALUE, 1) == MIN_VALUE - 1
+        assert calc.subtract(1, MAX_VALUE) == 1 - MAX_VALUE
+        assert calc.subtract(1, MIN_VALUE) == 1 - MIN_VALUE
     
     def test_multiply_invalid_input(self, calc : Calculator):
-        with pytest.raises(InvalidInputException):
-            calc.multiply(5, MAX_VALUE + 10)
+        self.__test_invalid_input_exception(calc.multiply)
         
-        with pytest.raises(InvalidInputException):
-            calc.multiply(MIN_VALUE - 1, 5)
-        
-        with pytest.raises(InvalidInputException):
-            calc.multiply(MAX_VALUE + 1, 5)
-        
-        with pytest.raises(InvalidInputException):
-            calc.multiply(5, MIN_VALUE - 10)
-        
-        assert calc.multiply(5, MAX_VALUE) == 5 * MAX_VALUE
+        assert calc.multiply(MAX_VALUE, 1) == MAX_VALUE
+        assert calc.multiply(MIN_VALUE, 1) == MIN_VALUE
+        assert calc.multiply(1, MAX_VALUE) == MAX_VALUE
+        assert calc.multiply(1, MIN_VALUE) == MIN_VALUE
     
     def test_divide_invalid_input(self, calc : Calculator):
-        with pytest.raises(InvalidInputException):
-            calc.divide(MAX_VALUE + 1, 1)
-        with pytest.raises(InvalidInputException):
-            calc.divide(MIN_VALUE - 1, 1)
-        with pytest.raises(InvalidInputException):
-            calc.divide(1, MAX_VALUE + 1)
-        with pytest.raises(InvalidInputException):
-            calc.divide(1, MIN_VALUE - 1)
+        self.__test_invalid_input_exception(calc.divide)
         
         assert calc.divide(MAX_VALUE, 1) == MAX_VALUE
+        assert calc.divide(MIN_VALUE, 1) == MIN_VALUE
+        assert calc.divide(1, MAX_VALUE) == 1 / MAX_VALUE
+        assert calc.divide(1, MIN_VALUE) == 1 / MIN_VALUE
 
     def test_divide_by_zero(self, calc : Calculator):
         """Test dividing by zero raises ValueError."""
-        with pytest.raises(ValueError):
+        check = lambda exc_info: str(exc_info) == "Cannot divide by zero"
+
+        with pytest.raises(ValueError, check=check):
             calc.divide(5, 0)
         
         assert calc.divide(0, 5) == 0
         assert calc.divide(5, 1) == 5
+        assert calc.divide(-5, 1) == -5
+        assert calc.divide(1, -5) == -1/5
+        assert calc.divide(-5, -1) == 5
