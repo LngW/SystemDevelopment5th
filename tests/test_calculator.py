@@ -149,19 +149,19 @@ class TestInvalidInput:
 
         with pytest.raises(InvalidInputException) as exc_info:
             callable(MAX_VALUE + 1, 1)
-        assert check(exc_info)
+        assert check(exc_info.value)
         
         with pytest.raises(InvalidInputException) as exc_info:
             callable(MIN_VALUE - 1, 1)
-        assert check(exc_info)
+        assert check(exc_info.value)
 
         with pytest.raises(InvalidInputException) as exc_info:
             callable(1, MAX_VALUE + 1)
-        assert check(exc_info)
+        assert check(exc_info.value)
         
         with pytest.raises(InvalidInputException) as exc_info:
             callable(1, MIN_VALUE - 1)
-        assert check(exc_info)
+        assert check(exc_info.value)
     
     def test_add_invalid_input(self, calc : Calculator):
         """Test adding invalid input raises exception."""
@@ -202,7 +202,7 @@ class TestInvalidInput:
 
         with pytest.raises(ValueError) as exc_info:
             calc.divide(5, 0)
-        assert check(exc_info)
+        assert check(exc_info.value)
         
         assert calc.divide(0, 5) == 0
         assert calc.divide(5, 1) == 5
