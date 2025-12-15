@@ -198,7 +198,8 @@ class TestInvalidInput:
 
     def test_divide_by_zero(self, calc : Calculator):
         """Test dividing by zero raises ValueError."""
-        check = lambda exc_info: str(exc_info) == "Cannot divide by zero"
+        def check(exc_info):
+            return str(exc_info) == "Cannot divide by zero"
 
         with pytest.raises(ValueError) as exc_info:
             calc.divide(5, 0)
