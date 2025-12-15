@@ -147,17 +147,21 @@ class TestInvalidInput:
     def __test_invalid_input_exception(self, callable):
         check = self.__check_expception_message("Input value out of valid range")
 
-        with pytest.raises(InvalidInputException, check=check):
+        with pytest.raises(InvalidInputException) as exc_info:
             callable(MAX_VALUE + 1, 1)
+        assert check(exc_info)
         
-        with pytest.raises(InvalidInputException, check=check):
+        with pytest.raises(InvalidInputException) as exc_info:
             callable(MIN_VALUE - 1, 1)
+        assert check(exc_info)
 
-        with pytest.raises(InvalidInputException, check=check):
+        with pytest.raises(InvalidInputException) as exc_info:
             callable(1, MAX_VALUE + 1)
+        assert check(exc_info)
         
-        with pytest.raises(InvalidInputException, check=check):
+        with pytest.raises(InvalidInputException) as exc_info:
             callable(1, MIN_VALUE - 1)
+        assert check(exc_info)
     
     def test_add_invalid_input(self, calc : Calculator):
         """Test adding invalid input raises exception."""
@@ -196,8 +200,9 @@ class TestInvalidInput:
         """Test dividing by zero raises ValueError."""
         check = lambda exc_info: str(exc_info) == "Cannot divide by zero"
 
-        with pytest.raises(ValueError, check=check):
+        with pytest.raises(ValueError) as exc_info:
             calc.divide(5, 0)
+        assert check(exc_info)
         
         assert calc.divide(0, 5) == 0
         assert calc.divide(5, 1) == 5
