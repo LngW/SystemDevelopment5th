@@ -1,7 +1,7 @@
 """
 A simple calculator module with basic arithmetic operations.
 """
-
+from os import path
 
 class InvalidInputException(Exception):
     """Exception raised when input values are outside the valid range."""
