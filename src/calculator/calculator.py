@@ -2,13 +2,17 @@
 A simple calculator module with basic arithmetic operations.
 """
 
+
 class InvalidInputException(Exception):
     """Exception raised when input values are outside the valid range."""
+
     pass
 
 
 MAX_VALUE = 1_000_000
 MIN_VALUE = -1_000_000
+
+
 class Calculator:
     """Calculator class providing basic arithmetic operations."""
 
@@ -83,8 +87,3 @@ class Calculator:
             raise ValueError("Cannot divide by zero")
         self._chechk_valid_input(a, b)
         return a / b
-
-
-
-
-
